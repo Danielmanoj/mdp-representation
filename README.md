@@ -63,7 +63,7 @@ R(S6)=−1 (Penalty for finding the wrong classroom, e.g., 102).
 
 ### Graphical Representation
 
-![WhatsApp Image 2024-08-27 at 8 23 26 AM](https://github.com/user-attachments/assets/c93331f6-e0ef-4215-836e-242f1f50e078)
+![WhatsApp Image 2024-09-03 at 16 18 30_3e262693](https://github.com/user-attachments/assets/ddb3b18d-c335-4946-b57f-f7ed95ba663e)
 
 
 ## PYTHON REPRESENTATION:
