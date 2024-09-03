@@ -1,97 +1,108 @@
- # EXPERIMENT 01:MDP REPRESENTATION
+# MDP REPRESENTATION
 
 ## AIM:
-To represent any one real world problem in Markov Decision Problem(MDP).
+To create a MDP (Markov Decision Process) for the undertaken problem statement
 
 ## PROBLEM STATEMENT:
+Finding class room in university building ground floor.
 
-### Problem Description:
-Move a coin to reach the goal in a 3*3 grid.
+### Problem Description
+Find a specific classroom on the ground floor. 7 states and 4 actions.
 
-### State Space:
-{0,1,2,3,4,5,6,7,8}
 
-### Sample State:
-2
+### State Space
+Specific locations on the ground floor such as hallways and intersections.
 
-### Action Space:
-{Up[0],Down[1],Left[2],Right[3]}
+Specific classrooms on the ground floor.
 
-### Sample Action:
-Down[1]
+### Sample State
+S1 : At the entrance of the ground floor.
 
-### Reward Function:
-To reach goal ->+1(Reward)
-Otherwise ->0
+S2 : In hallway 1.
 
-## GRAPHICAL REPRESENTATION:
-![WhatsApp Image 2023-09-01 at 8 16 53 PM](https://github.com/Rithigasri/mdp-representation/assets/93427256/f45e222a-0378-4259-9ca6-929561c48018)
+S3: In hallway 2.
+
+𝑆4: At the intersection of two hallways.
+
+𝑆5: In front of classroom 101.
+
+𝑆6: In front of classroom 102.
+
+s7: In front of classroom 103.
+
+### Action Space
+There are four actions 
+
+A1: Move forward.
+
+𝐴2: Turn left.
+
+𝐴3: Turn right.
+
+𝐴4: Enter a classroom.
+
+### Sample Action
+Initial State: The student starts at the entrance 
+
+S1 on the ground floor.Goal State: The student needs to find classroom 101, which is on the ground floor.
+
+Policy Example:
+
+𝜋(𝑆1)=𝐴1π(S1)=A 1(Move forward to hallway 1).
+
+𝜋(𝑆2)=𝐴3π(S 2)=A3(Turn right to reach classroom 101).
+
+𝜋(𝑆5)=𝐴4π(S5)=A 4(Enter classroom 101).
+
+### Reward Function
+R(S5)=+10 (Reward for finding the correct classroom, e.g., 101).
+
+R(S6)=−1 (Penalty for finding the wrong classroom, e.g., 102).
+
+𝑅(𝑆2)=0R(S 2)=0 (Neutral reward for just being in the hallway).
+
+### Graphical Representation
+
+![WhatsApp Image 2024-08-27 at 8 23 26 AM](https://github.com/user-attachments/assets/c93331f6-e0ef-4215-836e-242f1f50e078)
+
 
 ## PYTHON REPRESENTATION:
 ```
-# Creating Dictionary
-P={
-    0:{
-        0:[(0.666,0,0.0,False),(0.333,3,0.0,False)],
-        1:[(0.333,3,0.0,False),(0.333,0,0.0,False),(0.333,1,0.0,False)],
-        2:[(0.666,0,0.0,False),(0.333,3,0.0,False)],
-        3:[(0.333,1,0.0,False),(0.333,0,0.0,False),(0.333,3,0.0,False)]
+solver_mdp = {
+    # State S1: Entrance
+    1: {
+        1: [(1.0, 2, -1, False)],  # Move forward to Hallway 1 (S2)
     },
-    1:{
-        0:[(0.333,1,0.0,False),(0.333,0,0.0,False),(0.333,2,0.0,False)],
-        1:[(0.333,4,0.0,False),(0.333,0,0.0,False),(0.333,2,0.0,False)],
-        2:[(0.333,0,0.0,False),(0.333,1,0.0,False),(0.333,4,0.0,False)],
-        3:[(0.333,2,0.0,False),(0.333,1,0.0,False),(0.333,4,0.0,False)]
+    # State S2: Hallway 1
+    2: {
+        1: [(1.0, 5, 10, True)],   # Turn right to Classroom 101 (S5), goal state with reward 10
+        2: [(1.0, 4, -1, False)],  # Move forward to Intersection (S4)
     },
-    2:{
-        0:[(0.666,2,0.0,False),(0.333,1,0.0,False)],
-        1:[(0.333,5,0.0,False),(0.333,1,0.0,False),(0.333,2,0.0,False)],
-        2:[(0.333,1,0.0,False),(0.333,2,0.0,False),(0.333,5,0.0,False)],
-        3:[(0.666,2,0.0,False),(0.333,5,0.0,False)]
+    # State S3: Hallway 2
+    3: {
+        1: [(1.0, 6, -1, False)],  # Move forward to Classroom 102 (S6), wrong classroom with penalty -1
+        3: [(1.0, 4, -1, False)],  # Move backward to Intersection (S4)
     },
-    3:{
-        0:[(0.333,0,0.0,False),(0.333,3,0.0,False),(0.333,4,0.0,False)],
-        1:[(0.333,6,0.0,False),(0.333,3,0.0,False),(0.333,4,0.0,False)],
-        2:[(0.333,3,0.0,False),(0.333,0,0.0,False),(0.333,6,0.0,False)],
-        3:[(0.333,4,0.0,False),(0.333,0,0.0,False),(0.333,6,0.0,False)]
+    # State S4: Intersection
+    4: {
+        1: [(1.0, 2, -1, False)],  # Turn left to Hallway 1 (S2)
+        2: [(1.0, 3, -1, False)],  # Move forward to Hallway 2 (S3)
     },
-    4:{
-        0:[(0.333,1,0.0,False),(0.333,3,0.0,False),(0.333,5,0.0,False)],
-        1:[(0.333,7,0.0,False),(0.333,3,0.0,False),(0.333,5,0.0,False)],
-        2:[(0.333,3,0.0,False),(0.333,1,0.0,False),(0.333,7,0.0,False)],
-        3:[(0.333,5,0.0,False),(0.333,1,0.0,False),(0.333,7,0.0,False)]
+    # State S5: Classroom 101 - Goal State
+    5: {
+        # No actions needed since this is the terminal state
     },
-    5:{
-        0:[(0.333,2,0.0,False),(0.333,4,0.0,False),(0.333,5,0.0,False)],
-        1:[(0.333,8,1.0,True),(0.333,4,0.0,False),(0.333,5,0.0,False)],
-        2:[(0.333,4,0.0,False),(0.333,1,0.0,False),(0.333,7,0.0,False)],
-        3:[(0.333,5,0.0,False),(0.333,1,0.0,False),(0.333,7,0.0,False)]
-    },
-    6:{
-        0:[(0.333,3,0.0,False),(0.333,6,0.0,False),(0.333,7,0.0,False)],
-        1:[(0.666,6,0.0,False),(0.333,7,0.0,False)],
-        2:[(0.666,6,0.0,False),(0.333,3,0.0,False)],
-        3:[(0.333,7,0.0,False),(0.333,3,0.0,False),(0.333,6,0.0,False)]
-    },
-    7:{
-        0:[(0.333,4,0.0,False),(0.333,6,0.0,False),(0.333,8,1.0,True)],
-        1:[(0.333,7,0.0,False),(0.333,6,0.0,False),(0.333,8,1.0,True)],
-        2:[(0.333,6,0.0,False),(0.333,4,0.0,False),(0.333,7,0.0,False)],
-        3:[(0.333,8,1.0,True),(0.333,4,0.0,False),(0.333,7,0.0,False)]
-    },
-    8:{
-        0:[(0.333,5,0.0,False),(0.333,7,0.0,False),(0.333,8,1.0,True)],
-        1:[(0.666,8,1.0,True),(0.333,7,0.0,False)],
-        2:[(0.333,7,0.0,False),(0.333,5,0.0,False),(0.333,8,1.0,True)],
-        3:[(0.666,8,1.0,True),(0.333,5,0.0,False)]
+    # State S6: Classroom 102
+    6: {
+        # No further actions; penalty for entering the wrong classroom
     }
 }
+
 ```
+
 ## OUTPUT:
-![image](https://github.com/Rithigasri/mdp-representation/assets/93427256/c784b237-419b-4e3f-b7b0-3d5affa10f32)
+![image](https://github.com/user-attachments/assets/5e99a80c-a122-4ef0-b2a5-9cac6d8883a5)
+
 
 ## RESULT:
-Thus a real world problem is represented as Markov Decision Problem in the following ways successfully:
-1. Graphical Representation
-2. Python Representation
-
+Thus, the MDP for a stochastic model using python is implemented successfully
